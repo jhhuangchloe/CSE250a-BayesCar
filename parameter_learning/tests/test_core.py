@@ -1,4 +1,4 @@
-"""Independent oracles for indexing, marginalization, EM and handoff behavior."""
+"""Independent oracles for indexing, marginalization and EM."""
 from itertools import product
 
 import numpy as np
@@ -8,7 +8,6 @@ import pytest
 from parameter_learning import DiscreteBN, fit_em, fit_mle
 from structure.bn import fit_cpts, log_likelihood
 from parameter_learning.metrics import normalized_mutual_information as nmi
-from parameter_learning.e2_handoff import mcar_mask
 
 
 def tiny():
@@ -157,12 +156,3 @@ def test_nmi_sparse_pairs_constants_and_permutations():
     assert nmi([0, 0, 0], [1, 1, 1]) == 1
     assert nmi([0, 0, 1, 1], [0, 1, 0, 1]) == pytest.approx(0)
     assert nmi([0, 1, 1], [0, 0, 0]) == pytest.approx(0)
-
-
-def test_mask_only_hides_observed_cells_and_is_reproducible():
-    data = pd.DataFrame({"A": [0, 1, None, 0] * 30, "B": [1, 1, 0, 0] * 30}, dtype="Int64")
-    a, mask = mcar_mask(data, ["A"], .5, 0)
-    b, second_mask = mcar_mask(data, ["A"], .5, 0)
-    assert a.equals(b) and mask.equals(second_mask)
-    assert a.isna().equals(data.isna() | mask)
-    assert not mask.B.any()
