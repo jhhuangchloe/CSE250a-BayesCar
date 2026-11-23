@@ -18,7 +18,7 @@ Opening the notebook needs Jupyter, which is not part of `requirements.txt`.
 - The model is the expert DAG from [dags.json](../structure/outputs/dags.json) with add-one smoothing, fit with [Part C's](../parameter_learning/README.md) `fit_mle` and `fit_em`.
 - For each rate (0%, 20% and 40%) and masking seed (0, 1 and 2), `mcar_mask` hides that share of the observed `service_history_quality` and `overall_condition_score` cells in the training split, independently and completely at random. The original missing cells stay missing, so 0% means the data as it is.
 - All three methods fit the same masked copy. Mode imputation learns its modes from the masked training data only. EM starts from the mode-imputed CPTs and stops when the objective gains less than 1e-7 nats per row.
-- Every model is scored on the full test split, with missing test cells summed out. Recovery accuracy comes from one fixed 20% test mask (seed 2026), and only the deliberately hidden test cells are scored.
+- Every model is scored on the full test split, with missing test cells summed out. Recovery accuracy comes from one fixed 20% test mask (seed 2026), and only the cells hidden by that mask are scored.
 - CPT KL compares each fit with complete-case MLE on the unmasked training split, averaged over parent configurations and then over nodes.
 
 ## Outputs
