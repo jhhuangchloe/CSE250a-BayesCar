@@ -8,18 +8,20 @@ VE check, E4 and E5 read those CPTs. Running a later step alone reuses the commi
 upstream outputs.
 """
 import argparse
+import importlib
 from time import perf_counter
 
 from inference import check_setup, run_e4
-from missing_data import run_e2
-from parameter_learning import run_e3
+from parameter_learning import run_part_c
 from prediction import run_e5
 from structure import run_e1
+
+run_e2 = importlib.import_module("complete-case_MLE_and_EM.run_e2")
 
 STEPS = {
     "e1": ("E1 structure learning", run_e1.run),
     "e2": ("E2 missing data", run_e2.run),
-    "e3": ("CPT fitting and E3 latent variable", run_e3.run),
+    "e3": ("CPT fitting and E3 latent variable", run_part_c.run),
     "check": ("VE check against pgmpy", check_setup.main),
     "e4": ("E4 exact vs approximate inference", run_e4.run),
     "e5": ("E5 price-tier prediction", run_e5.run),

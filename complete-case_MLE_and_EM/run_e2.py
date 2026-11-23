@@ -1,6 +1,6 @@
 """E2: complete-case MLE, mode imputation + MLE and EM under the same MCAR masks.
 
-python -m missing_data.run_e2
+python -m complete-case_MLE_and_EM.run_e2
 Each rate and seed draws one training mask that all three methods share. Every model
 is scored on the same raw test evidence and on one fixed 20% test mask for recovery.
 """
@@ -13,26 +13,16 @@ import pandas as pd
 
 from common import load_dags, load_split
 from parameter_learning import fit_em, fit_mle
+from parameter_learning.e2_handoff import MASK_COLUMNS, mcar_mask
 from structure.bn import dag_from_edges
 
 OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
-MASK_COLUMNS = ["service_history_quality", "overall_condition_score"]
 ALPHA = 1.0
 RATES = (0.0, 0.2, 0.4)
 SEEDS = (0, 1, 2)
 METHODS = ("Complete-case MLE", "Mode + MLE", "EM")
 TEST_MASK_RATE, TEST_MASK_SEED = 0.2, 2026
 EM_MAX_ITER, EM_TOL = 500, 1e-7
-
-
-def mcar_mask(frame, columns, rate, seed):
-    """Hide each observed cell of `columns` with probability `rate`. Returns (masked, mask)."""
-    if not np.isfinite(rate) or not 0 <= rate <= 1:
-        raise ValueError("rate must be finite and in [0, 1]")
-    mask = pd.DataFrame(False, index=frame.index, columns=frame.columns)
-    draws = np.random.default_rng(seed).random((len(frame), len(columns)))
-    mask[columns] = (draws < rate) & frame[columns].notna().to_numpy()
-    return frame.mask(mask), mask
 
 
 @dataclass

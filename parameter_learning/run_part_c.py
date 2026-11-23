@@ -1,6 +1,6 @@
 """Part C: fit the shared CPTs (complete-case MLE and EM) and run E3 with a latent factor H.
 
-python -m parameter_learning.run_e3
+python -m parameter_learning.run_part_c
 Uses Part A's splits and Part B's DAGs unchanged. condition_grade labels are read only
 after fitting and validation-based seed selection finish.
 """
