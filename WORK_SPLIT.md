@@ -1,6 +1,6 @@
 # Work split
 
-Five parts, one per person. Fill in your name next to your part and update the status when it changes.
+Five parts, one per person. The table lists who owns each part, its status and where its code lives.
 
 | Part | Owner | Status | Code |
 | --- | --- | --- | --- |
